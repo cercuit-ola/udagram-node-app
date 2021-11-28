@@ -48,7 +48,7 @@ import { filterImageFromURL, deleteLocalFiles } from "./util/util";
           .json({ statusCode: 400, message: "Invalid Image URL" });
       }
   
-      const filteredpath = await filterImageFromURL(query.image_url)
+      const filteredpath = await filterImageFromURL(query.image_url.toString())
 
       await res.sendFile(filteredpath, (error) => {
         if (error) { return res.status(422).send(`Not able to process the image`); }
