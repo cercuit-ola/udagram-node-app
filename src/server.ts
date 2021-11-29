@@ -38,17 +38,18 @@ import { filterImageFromURL, deleteLocalFiles } from "./util/util";
     res.send("try GET /filteredimage?image_url={{}}");
   });
 
-  app.get("/filteredimage", async (req, res) => {
+  app.get("/filteredimage", async (req: express.Request, res: express.Response) => {
     try {
       const query = req.query;
+      const image_url: string = req.query.image_url
       
-      if (!query.image_url) {
+      if (!image_url) {
         return res
           .status(400)
           .json({ statusCode: 400, message: "Invalid Image URL" });
       }
   
-      const filteredpath = await filterImageFromURL(query.image_url.toString())
+      const filteredpath = await filterImageFromURL(image_url)
 
       res.sendFile(filteredpath, (error) => {
         if (error) { return res.status(422).send(`Not able to process the image`); }
@@ -57,7 +58,6 @@ import { filterImageFromURL, deleteLocalFiles } from "./util/util";
         deleteLocalFiles([filteredpath])
       });
     } catch(error) {
-      console.log('----->', error)
       res.json({statusCode: 500, message: "An error occured", error})
     }
   });
